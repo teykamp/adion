@@ -15,6 +15,8 @@ const SB = createClient(process.env.API_URL, process.env.API_KEY);
 app.get("/", (req, res) => {
   res.status(200).json({ message: "testing" });
 });
+
+// get all users
 app.get("/users", async (req, res) => {
   const { data, error } = await SB.from("User").select("*").limit(5);
   if (error) {
@@ -23,6 +25,7 @@ app.get("/users", async (req, res) => {
   res.status(200).json({ data: data });
 });
 
+// get specific user
 app.get("/users/:uuid", async (req, res) => {
   const { data, error } = await SB.from("User")
     .select("*")
@@ -35,6 +38,7 @@ app.get("/users/:uuid", async (req, res) => {
   res.status(200).json({ data: data });
 });
 
+// create user
 app.post("/users/create", async (req, res) => {
   /**
    * @type{user}
@@ -93,11 +97,21 @@ app.post("/users/create", async (req, res) => {
     res.status(400).json({ error: error });
   }
   res.status(201).json({ data: `user ${new_user.email} created` });
-
-  //   new_user = req.body();
-  //   const { error } = await SB.from("User").insert();
 });
-app.delete("/users/uuid", (req, res) => {});
+
+// delete user
+app.delete("/users/:uuid", async (req, res) => {
+  const user_uuid = req.params.uuid;
+  const { error } = await SB
+  .from('User')
+  .delete()
+  .eq('id', user_uuid)
+
+  if(error){
+    res.status(400).json({"error": error});
+  };
+  res.status(200).json({"data": `user ${user_uuid} deleted`})
+});
 
 app.listen(3000, () => {
   console.log(`server running on ${3000}`);

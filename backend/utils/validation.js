@@ -1,10 +1,13 @@
-export default function validate_UserJson(new_user) {
+import { getConnection } from "./connection.js";
+
+export function validate_UserJson(new_user) {
     /**
      * @type{Array<number>}
      */
     const errors = [];
   
     const characters_only = /^[A-Za-z]+$/;
+
     const validateEmail = (email) => {
       return String(email)
         .toLowerCase()
@@ -14,7 +17,9 @@ export default function validate_UserJson(new_user) {
     };
   
     const checkUserExists = async (email) => {
-      const user_email = await (await SB.from("User").select("email")).data;
+      const SB = getConnection();
+      const user_email = (await SB.from("User").select("email")).data;
+      // const data, err = await SB.from("User").select("email").data;
       return user_email.filter((eml) => (eml = email)) == 0;
     };
   

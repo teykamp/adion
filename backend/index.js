@@ -3,18 +3,18 @@ import express from "express";
 import cors from "cors";
 import "crypto";
 import bodyParser from "body-parser";
-import { createClient } from "@supabase/supabase-js";
-import {router as UserRouter} from "../backend/routes/users";
-// import {router as UserRouter} from "./routes/users";
+import {getConnection} from "./utils/connection.js";
+import {router as UserRouter} from "./routes/users.js";
 
 const app = express();
 
 
 // app.use(cors);
-app.use(bodyParser.json()); // helps to read the incoming data
-const SB = createClient(process.env.API_URL, process.env.API_KEY);
-
+app.use(express.json()) // helps to read the incoming data
 app.use("/api/user/", UserRouter)
+app.get("/", (req,res) => {
+  res.status(200).json({message : "Hello There!"})
+})
 app.listen(3000, () => {
   console.log(`server running on ${3000}`);
 });

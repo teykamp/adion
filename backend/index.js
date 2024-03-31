@@ -5,13 +5,15 @@ import "crypto";
 import bodyParser from "body-parser";
 import {getConnection} from "./utils/connection.js";
 import {router as UserRouter} from "./routes/users.js";
+import {router as RidePreferenceRouter} from "./routes/ridePreferences.js"
 
 const app = express();
 
 
 // app.use(cors);
 app.use(express.json()) // helps to read the incoming data
-app.use("/api/user/", UserRouter)
+app.use("/api/user/", UserRouter);
+app.use("/api/ridePrefs/",RidePreferenceRouter);
 app.get("/", (req,res) => {
   res.status(200).json({message : "Hello There!"})
 })

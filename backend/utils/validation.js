@@ -38,3 +38,4 @@ export function validate_UserJson(new_user) {
   
     return errors;
   }
+

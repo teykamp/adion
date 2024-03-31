@@ -45,6 +45,7 @@ router.post("/create", async (req, res) => {
       error_string = error_string + userInput_ErrFlags[err] + "\n";
     });
     res.status(400).json({ error: error_string });
+    return;
   }
 
   const { error } = await SB.from("User").insert(new_user);

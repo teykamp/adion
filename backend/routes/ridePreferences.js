@@ -10,14 +10,18 @@ router.post("/:uuid", async (req, res) => {
   const SB = getConnection();
   const user_prefs = req.body;
   const user_uuid = req.params.uuid;
-  console.log({ user_id: user_uuid, ...user_prefs})
-  const { data, error } = SB.from("RidePreferences")
-    .insert({ user_id: user_uuid, ...user_prefs })
-    .select();
+  console.log({ user_id: user_uuid, ...user_prefs });
+  const error = SB.from("RidePreferences").insert([
+    {
+      user_id: user_uuid,
+      ...user_prefs,
+    },
+  ]);
   if (error) {
     res.status(400).json({ error: error });
+    return;
   }
-  res.status(200).json({ data: data });
+  res.status(200).json({ data: { user_id: user_uuid, ...user_prefs } });
 });
 
 router.get("/:uuid", async (req, res) => {
@@ -50,7 +54,7 @@ router.delete("/:uuid", async (req, res) => {
   const SB = getConnection();
   const error = SB.from("RidePreferences")
     .delete()
-    .eq("usre_id", req.params.uuid);
+    .eq("user_id", req.params.uuid);
   if (error) {
     res.status(400).json({ error: error });
     return;
